@@ -21,11 +21,11 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Empresa` (
   `id_empresa` INT NOT NULL AUTO_INCREMENT,
   `nit` INT NOT NULL,
   `nombre_empresa` VARCHAR(45) NOT NULL,
-  `direccion_empresa` TEXT(45) NULL,
+  `direccion_empresa` TEXT(150) NULL,
   `ciudad_empresa` VARCHAR(45) NULL,
   `departamento_empresa` VARCHAR(45) NULL,
   `telefono_empresa` INT NULL,
-  `url` TEXT(45) NULL,
+  `url` TEXT(100) NULL,
   `email_empresa` TEXT(45) NULL,
   PRIMARY KEY (`id_empresa`))
 ENGINE = InnoDB;
@@ -48,14 +48,14 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Persona` (
   `id_persona` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   `apellido` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) NULL,
   `tipo_documento` VARCHAR(45) NULL,
   `numero_documento` INT NULL,
-  `celular` INT NULL,
   `fecha_nacimiento` DATETIME NULL,
   `ciudad_origen` VARCHAR(45) NULL,
   `departamento_origen` VARCHAR(45) NULL,
-  `direccion` VARCHAR(45) NULL,
+  `email` TEXT(45) NULL,
+  `celular` INT NULL,
+  `direccion` TEXT(150) NULL,
   PRIMARY KEY (`id_persona`))
 ENGINE = InnoDB;
 
@@ -70,25 +70,25 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Usuario` (
   `cargo` VARCHAR(45) NULL,
   `area` VARCHAR(45) NULL,
   `ultima_sesion` DATETIME NULL,
-  `Persona_id_persona` INT NOT NULL,
-  `Empresa_id_empresa` INT NOT NULL,
-  `Tipo_usuario_id_tipo_usuario` INT NOT NULL,
+  `id_persona` INT NOT NULL,
+  `id_empresa` INT NOT NULL,
+  `id_tipo_usuario` INT NOT NULL,
   PRIMARY KEY (`id_usuario`),
-  INDEX `fk_Usuario_Persona1_idx` (`Persona_id_persona` ASC) VISIBLE,
-  INDEX `fk_Usuario_Empresa1_idx` (`Empresa_id_empresa` ASC) VISIBLE,
-  INDEX `fk_Usuario_Tipo_usuario1_idx` (`Tipo_usuario_id_tipo_usuario` ASC) VISIBLE,
+  INDEX `fk_Usuario_Persona1_idx` (`id_persona` ASC) VISIBLE,
+  INDEX `fk_Usuario_Empresa1_idx` (`id_empresa` ASC) VISIBLE,
+  INDEX `fk_Usuario_Tipo_usuario1_idx` (`id_tipo_usuario` ASC) VISIBLE,
   CONSTRAINT `fk_Usuario_Persona1`
-    FOREIGN KEY (`Persona_id_persona`)
+    FOREIGN KEY (`id_persona`)
     REFERENCES `ruipidatabase`.`Persona` (`id_persona`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Usuario_Empresa1`
-    FOREIGN KEY (`Empresa_id_empresa`)
+    FOREIGN KEY (`id_empresa`)
     REFERENCES `ruipidatabase`.`Empresa` (`id_empresa`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Usuario_Tipo_usuario1`
-    FOREIGN KEY (`Tipo_usuario_id_tipo_usuario`)
+    FOREIGN KEY (`id_tipo_usuario`)
     REFERENCES `ruipidatabase`.`Tipo_usuario` (`id_tipo_usuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -100,7 +100,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Programa_PyDT` (
   `id_programaPyDT` INT NOT NULL AUTO_INCREMENT,
-  `nombre_programaPyDT` VARCHAR(45) NULL,
+  `nombre_programaPyDT` VARCHAR(100) NULL,
   PRIMARY KEY (`id_programaPyDT`))
 ENGINE = InnoDB;
 
@@ -112,24 +112,24 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Paciente` (
   `id_paciente` INT NOT NULL AUTO_INCREMENT,
   `huella` LONGBLOB NOT NULL,
   `rh` VARCHAR(45) NULL,
-  `gestante` TINYINT NULL,
-  `sexo` CHAR(1) NULL,
+  `gestante` VARCHAR(45) NULL,
+  `sexo` VARCHAR(45) NULL,
   `etnia` VARCHAR(45) NULL,
   `comunidad` VARCHAR(45) NULL,
   `municipio` VARCHAR(45) NULL,
   `fecha_registro` VARCHAR(45) NULL,
-  `Persona_id_persona` INT NOT NULL,
-  `Programa_PyDT_id_programaPyDT` INT NOT NULL,
+  `id_persona` INT NOT NULL,
+  `id_programaPyDT` INT NULL,
   PRIMARY KEY (`id_paciente`),
-  INDEX `fk_Paciente_Persona1_idx` (`Persona_id_persona` ASC) VISIBLE,
-  INDEX `fk_Paciente_Programa_PyDT1_idx` (`Programa_PyDT_id_programaPyDT` ASC) VISIBLE,
+  INDEX `fk_Paciente_Persona1_idx` (`id_persona` ASC) VISIBLE,
+  INDEX `fk_Paciente_Programa_PyDT1_idx` (`id_programaPyDT` ASC) VISIBLE,
   CONSTRAINT `fk_Paciente_Persona1`
-    FOREIGN KEY (`Persona_id_persona`)
+    FOREIGN KEY (`id_persona`)
     REFERENCES `ruipidatabase`.`Persona` (`id_persona`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Paciente_Programa_PyDT1`
-    FOREIGN KEY (`Programa_PyDT_id_programaPyDT`)
+    FOREIGN KEY (`id_programaPyDT`)
     REFERENCES `ruipidatabase`.`Programa_PyDT` (`id_programaPyDT`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -172,21 +172,21 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`timestamps` (
 CREATE TABLE IF NOT EXISTS `ruipidatabase`.`HistoriaC` (
   `id_HistoriaC` INT NOT NULL AUTO_INCREMENT,
   `motivo_consulta` MEDIUMTEXT NOT NULL,
-  `fecha_consulta` VARCHAR(45) NULL,
+  `fecha_consulta` DATETIME NULL,
   `eps` VARCHAR(45) NULL,
-  `alergias_medicamentos` VARCHAR(45) NULL,
-  `habitos` VARCHAR(45) NULL,
-  `enfermedad_actual` VARCHAR(45) NULL,
-  `antecedente_EP` VARCHAR(45) NULL,
-  `antecedentes_EF` VARCHAR(45) NULL,
-  `info_proced_Q` VARCHAR(45) NULL,
-  `info_parto` VARCHAR(45) NULL,
+  `alergias_medicamentos` VARCHAR(250) NULL,
+  `habitos` VARCHAR(250) NULL,
+  `enfermedad_actual` VARCHAR(250) NULL,
+  `antecedente_EP` VARCHAR(250) NULL,
+  `antecedentes_EF` VARCHAR(250) NULL,
+  `info_parto` LONGTEXT NULL,
   `diagnostico` LONGTEXT NULL,
-  `Paciente_id_paciente` INT NOT NULL,
+  `medicamentos_formulados` LONGTEXT NULL,
+  `id_paciente` INT NOT NULL,
   PRIMARY KEY (`id_HistoriaC`),
-  INDEX `fk_HistoriaC_Paciente1_idx` (`Paciente_id_paciente` ASC) VISIBLE,
+  INDEX `fk_HistoriaC_Paciente1_idx` (`id_paciente` ASC) VISIBLE,
   CONSTRAINT `fk_HistoriaC_Paciente1`
-    FOREIGN KEY (`Paciente_id_paciente`)
+    FOREIGN KEY (`id_paciente`)
     REFERENCES `ruipidatabase`.`Paciente` (`id_paciente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -201,3 +201,12 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 INSERT INTO Tipo_usuario (nombre_tipo_usuario) VALUES ('Administrador');
 INSERT INTO Tipo_usuario (nombre_tipo_usuario) VALUES ('Médico');
 INSERT INTO Tipo_usuario (nombre_tipo_usuario) VALUES ('Recepción');
+
+#Ingresar Programas Prevención y Detección Temprana de Enfermedades
+INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones de a Agudeza Visual');
+INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones del Crecimiento y Desarrollo (Menor a 10 Años)');
+INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones del Desarrollo del Joven (De 10 a 29 Años)');
+INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones Del Embarazo');
+INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones en el Adulto (Mayor a 45 Años)');
+INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Cáncer de Seno');
+INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Atención Específica en Salud Bucal');
