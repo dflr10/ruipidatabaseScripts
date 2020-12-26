@@ -1,0 +1,1 @@
+select * from usuario;paciente_has_usuario
