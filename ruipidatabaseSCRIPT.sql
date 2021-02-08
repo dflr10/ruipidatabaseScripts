@@ -49,13 +49,14 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Persona` (
   `nombre` VARCHAR(45) NOT NULL,
   `apellido` VARCHAR(45) NOT NULL,
   `tipo_documento` VARCHAR(45) NULL,
-  `numero_documento` INT NULL,
+  `numero_documento` VARCHAR(45) NULL,
   `fecha_nacimiento` DATE NULL,
   `ciudad_origen` VARCHAR(45) NULL,
   `departamento_origen` VARCHAR(45) NULL,
   `email` TEXT(45) NULL,
-  `celular` INT NULL,
+  `celular` VARCHAR(15) NULL,
   `direccion` TEXT(150) NULL,
+  `fecha_registro` VARCHAR(45) NULL,
   PRIMARY KEY (`id_persona`))
 ENGINE = InnoDB;
 
@@ -117,7 +118,6 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Paciente` (
   `etnia` VARCHAR(45) NULL,
   `comunidad` VARCHAR(45) NULL,
   `municipio` VARCHAR(45) NULL,
-  `fecha_registro` VARCHAR(45) NULL,
   `id_persona` INT NOT NULL,
   `id_programaPyDT` INT NULL,
   PRIMARY KEY (`id_paciente`),
@@ -197,17 +197,14 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-
 #Ingresar datos de tipos de usuario
 INSERT INTO Tipo_usuario (nombre_tipo_usuario) VALUES ('Administrador');
 INSERT INTO Tipo_usuario (nombre_tipo_usuario) VALUES ('Médico');
 INSERT INTO Tipo_usuario (nombre_tipo_usuario) VALUES ('Recepción');
 
 #Ingresar Programas Prevención y Detección Temprana de Enfermedades
-INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones Agudeza Visual');
 INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones Crecimiento y Desarrollo');
 INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones Desarrollo del Joven');
 INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones del Embarazo');
 INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Alteraciones en el Adulto');
 INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Cáncer de Seno');
-INSERT INTO Programa_PyDT (nombre_programaPyDT) VALUES('Atención Preventiva en Salud Bucal');
