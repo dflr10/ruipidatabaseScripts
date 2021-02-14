@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`timestamps` (
 CREATE TABLE IF NOT EXISTS `ruipidatabase`.`HistoriaC` (
   `id_HistoriaC` INT NOT NULL AUTO_INCREMENT,
   `motivo_consulta` MEDIUMTEXT NOT NULL,
-  `fecha_consulta` DATETIME NULL,
+  `fecha_consulta` VARCHAR(45) NULL,
   `eps` VARCHAR(45) NULL,
   `alergias_medicamentos` VARCHAR(250) NULL,
   `habitos` VARCHAR(250) NULL,
