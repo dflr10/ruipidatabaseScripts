@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Usuario` (
   `password` VARCHAR(45) NOT NULL,
   `cargo` VARCHAR(45) NULL,
   `area` VARCHAR(45) NULL,
-  `ultima_sesion` VARCHAR(45) NULL,
+  `ultima_actualizacion` VARCHAR(45) NULL,
   `id_persona` INT NOT NULL,
   `id_empresa` INT NOT NULL,
   `id_tipo_usuario` INT NOT NULL,
@@ -196,6 +196,7 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 
 #Ingresar datos de tipos de usuario
 INSERT INTO Tipo_usuario (nombre_tipo_usuario) VALUES ('Administrador');
