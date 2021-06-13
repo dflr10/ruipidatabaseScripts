@@ -1,4 +1,5 @@
 -- ruipidatabase script
+-- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -165,20 +166,20 @@ ENGINE = InnoDB;
 -- Table `ruipidatabase`.`HistoriaC`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ruipidatabase`.`HistoriaC` (
-  `id_HistoriaC` INT NOT NULL AUTO_INCREMENT,
+  `id_historiaC` INT NOT NULL AUTO_INCREMENT,
   `motivo_consulta` MEDIUMTEXT NOT NULL,
   `fecha_consulta` VARCHAR(45) NULL,
   `eps` VARCHAR(45) NULL,
   `alergias_medicamentos` VARCHAR(250) NULL,
   `habitos` VARCHAR(250) NULL,
   `enfermedad_actual` VARCHAR(250) NULL,
-  `antecedente_EP` VARCHAR(250) NULL,
+  `antecedentes_EP` VARCHAR(250) NULL,
   `antecedentes_EF` VARCHAR(250) NULL,
   `info_parto` LONGTEXT NULL,
   `diagnostico` LONGTEXT NULL,
   `medicamentos_formulados` LONGTEXT NULL,
   `id_paciente` INT NOT NULL,
-  PRIMARY KEY (`id_HistoriaC`),
+  PRIMARY KEY (`id_historiaC`),
   INDEX `fk_HistoriaC_Paciente1_idx` (`id_paciente` ASC) VISIBLE,
   CONSTRAINT `fk_HistoriaC_Paciente1`
     FOREIGN KEY (`id_paciente`)
@@ -317,6 +318,45 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Historial_empresa` (
   CONSTRAINT `fk_Empresa_copy1_Empresa1`
     FOREIGN KEY (`id_empresa_actualizada`)
     REFERENCES `ruipidatabase`.`Empresa` (`id_empresa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ruipidatabase`.`Historial_historiaC`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Historial_historiaC` (
+  `id_registro` INT NOT NULL AUTO_INCREMENT,
+  `last_motivo_consulta` MEDIUMTEXT NULL,
+  `last_eps` VARCHAR(45) NULL,
+  `last_alergias_medicamentos` VARCHAR(250) NULL,
+  `last_habitos` VARCHAR(250) NULL,
+  `last_enfermedad_actual` VARCHAR(250) NULL,
+  `last_antecedentes_EP` VARCHAR(250) NULL,
+  `last_antecedentes_EF` VARCHAR(250) NULL,
+  `last_info_parto` LONGTEXT NULL,
+  `last_diagnostico` LONGTEXT NULL,
+  `last_medicamentos_formulados` LONGTEXT NULL,
+  `new_motivo_consulta` MEDIUMTEXT NULL,
+  `new_eps` VARCHAR(45) NULL,
+  `new_alergias_medicamentos` VARCHAR(250) NULL,
+  `new_habitos` VARCHAR(250) NULL,
+  `new_enfermedad_actual` VARCHAR(250) NULL,
+  `new_antecedentes_EP` VARCHAR(250) NULL,
+  `new_antecedentes_EF` VARCHAR(250) NULL,
+  `new_info_parto` LONGTEXT NULL,
+  `new_diagnostico` LONGTEXT NULL,
+  `new_medicamentos_formulados` LONGTEXT NULL,
+  `fecha` DATETIME NULL,
+  `accion` VARCHAR(45) NULL,
+  `lugar` VARCHAR(45) NULL,
+  `id_historiaC_actualizada` INT NOT NULL,
+  PRIMARY KEY (`id_registro`),
+  INDEX `fk_Historial_historiaC_HistoriaC1_idx` (`id_historiaC_actualizada` ASC) VISIBLE,
+  CONSTRAINT `fk_Historial_historiaC_HistoriaC1`
+    FOREIGN KEY (`id_historiaC_actualizada`)
+    REFERENCES `ruipidatabase`.`HistoriaC` (`id_historiaC`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
