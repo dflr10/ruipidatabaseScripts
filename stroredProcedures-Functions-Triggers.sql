@@ -354,6 +354,9 @@ END
 //
 DELIMITER ;
 
+#Se encarga de generar un registro de una fila en la tabla  Paciente_Usuario cuando un usuario realice
+#la inserción de un paciente
+
 
 ##EMPRESA##
 ##Realiza una inserción de los datos de la empresa a la base de datos
@@ -404,35 +407,93 @@ END
 DELIMITER ;
 
 ##TRIGGERS##
-#Se encarga de guardar registros de la inserción de un usuario 
+#Se encarga de guardar registros de actualización de una persona 
 DELIMITER //
 
-CREATE TRIGGER insert_user_logs_AI
-AFTER INSERT ON usuario
+CREATE TRIGGER update_person_logs_BU
+BEFORE UPDATE ON Persona 
 FOR EACH ROW
 
 BEGIN
-INSERT INTO Auditoria_usuario (lugar, fecha, accion, id_usuario_insertado) 
-VALUES (current_user(), now(), "Se registró un nuevo usuario.", last_insert_id());
+INSERT INTO Historial_persona (last_nombre, last_apellido, last_tipo_documento, 
+last_numero_documento, last_fecha_nacimiento, last_ciudad_origen, last_departamento_origen, 
+last_email, last_celular, last_direccion, last_activo,
+new_nombre, new_apellido, new_tipo_documento, new_numero_documento, new_fecha_nacimiento, 
+new_ciudad_origen, new_departamento_origen, new_email, new_celular, new_direccion, new_activo,
+fecha, accion,  lugar, id_persona_actualizada) 
+VALUES (OLD.nombre, OLD.apellido, OLD.tipo_documento, OLD.numero_documento, OLD.fecha_nacimiento,
+OLD.ciudad_origen, OLD.departamento_origen, OLD.email, OLD.celular, OLD.direccion, OLD.activo,
+NEW.nombre, NEW.apellido, NEW.tipo_documento, NEW.numero_documento, NEW.fecha_nacimiento, 
+NEW.ciudad_origen, NEW.departamento_origen, NEW.email, NEW.celular, NEW.direccion, NEW.activo,
+now(), "Se modificó la persona.", current_user(), OLD.id_persona);
 
 END//
 
 DELIMITER ;
 
-#Se encarga de generar un registro de una fila en la tabla  Paciente_Usuario cuando un usuario realice
-#la inserción de un paciente
-/*DELIMITER //
 
-CREATE TRIGGER patient_user_log
-AFTER INSERT ON paciente
+#Se encarga de guardar registros de actualización de un usuario 
+DELIMITER //
+
+CREATE TRIGGER update_user_logs_BU
+BEFORE UPDATE ON Usuario 
 FOR EACH ROW
 
 BEGIN
-INSERT INTO Paciente_Usuario (id_paciente, id_usuario) 
-VALUES (last_insert_id());
+INSERT INTO Historial_usuario (last_username, last_password, last_cargo, last_area, last_id_tipo_usuario, 
+new_username, new_password, new_cargo, new_area, new_id_tipo_usuario, 
+fecha, accion, lugar, id_usuario_actualizado) 
+VALUES (OLD.username, OLD.password, OLD.cargo, OLD.area, OLD.id_tipo_usuario,
+NEW.username, NEW.password, NEW.cargo, NEW.area, NEW.id_tipo_usuario,
+ now(), "Se modificó el usuario.", current_user(), OLD.id_usuario);
+
 END//
 
-DELIMITER ;*/
+DELIMITER ;
+
+
+#Se encarga de guardar registros de actualización de un paciente 
+DELIMITER //
+
+CREATE TRIGGER update_patient_logs_BU
+BEFORE UPDATE ON Paciente 
+FOR EACH ROW
+
+BEGIN
+INSERT INTO Historial_paciente (last_rh, last_gestante, last_sexo, 
+last_etnia, last_comunidad, last_municipio, last_id_programaPyDT,
+new_rh, new_gestante, new_sexo, new_etnia, new_comunidad, new_municipio, new_id_programaPyDT,
+fecha, accion, lugar, id_paciente_actualizado) 
+VALUES (OLD.rh, OLD.gestante, OLD.sexo, OLD.etnia, OLD.comunidad, OLD.municipio, OLD.id_programaPyDT, 
+NEW.rh, NEW.gestante, NEW.sexo, NEW.etnia, NEW.comunidad, NEW.municipio, NEW.id_programaPyDT,
+ now(), "Se modificó el paciente.", current_user(), OLD.id_paciente);
+
+END//
+
+DELIMITER ;
+
+
+#Se encarga de guardar registros de actualización de la empresa 
+DELIMITER //
+
+CREATE TRIGGER update_enterprise_logs_BU
+BEFORE UPDATE ON Empresa 
+FOR EACH ROW
+
+BEGIN
+INSERT INTO Historial_empresa (last_direccion_empresa, last_ciudad_empresa, last_departamento_empresa, 
+last_telefono_empresa, last_url, last_email_empresa, new_direccion_empresa, new_ciudad_empresa, 
+new_departamento_empresa, new_telefono_empresa, new_url, new_email_empresa,
+fecha, accion, lugar, id_empresa_actualizada) 
+VALUES (OLD.direccion_empresa, OLD.ciudad_empresa, OLD.departamento_empresa, 
+OLD.telefono_empresa, OLD.url, OLD.email_empresa, 
+NEW.direccion_empresa, NEW.ciudad_empresa, NEW.departamento_empresa, 
+NEW.telefono_empresa, NEW.url, NEW.email_empresa, 
+ now(), "Se modificó al empresa.", current_user(), OLD.id_empresa);
+
+END//
+
+DELIMITER ;
 
 
 ##FUNCIONES##
@@ -453,6 +514,22 @@ END
 //
 DELIMITER ;
 
+#Verifica que la entidad usuario contenga al menos una fila
+DELIMITER //
+
+CREATE FUNCTION counterUSerAdmin()
+RETURNS INT
+BEGIN
+
+DECLARE x INT;
+SET x = (SELECT  id_tipo_usuario
+FROM Usuario 
+WHERE id_tipo_usuario=1);
+RETURN x;
+
+END
+//
+DELIMITER ;
 #Verifica que la entidad usuario contenga al menos una fila
 DELIMITER //
 
