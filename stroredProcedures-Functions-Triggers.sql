@@ -1,5 +1,5 @@
 #############################################################################
-#									USUARIOS								#
+# USUARIOS								#
 #############################################################################
 #Procedimiento que permite validar el Usuaro que inicia sesión en RUIPI
 DELIMITER //
@@ -244,7 +244,7 @@ END
 DELIMITER ;
 
 #############################################################################
-#									PACIENTES								#
+# PACIENTES								#
 #############################################################################
 #Procedimiento que permite seleccionar un Paciente a partir de un ID pasado como parámetro
 DELIMITER //
@@ -362,12 +362,12 @@ DELIMITER ;
 
 
 #################################################################################
-#								HISTORIA CLÍNICA								#
+# HISTORIA CLÍNICA								#
 #################################################################################
 #POR DEFINIR
 
 #############################################################################
-#									EMPRESA									#
+# EMPRESA								#
 #############################################################################
 #Permite realizar la inserción de los datos de la Empresa en la base de datos
 DELIMITER //
@@ -418,7 +418,7 @@ END
 DELIMITER ;
 
 #############################################################################
-#									TRIGGERS								#
+# TRIGGERS								#
 #############################################################################
 #Se encarga de guardar registros de actualización de una Persona
 DELIMITER //
@@ -535,7 +535,7 @@ DELIMITER ;
 
 
 #############################################################################
-#									FUNCIONES								#
+# FUNCIONES								#
 #############################################################################
 #Función que permite verificar que la entidad Empresa contenga datos
 DELIMITER //
@@ -571,20 +571,3 @@ END
 //
 DELIMITER ;
 
-
-#Función que permite verificar que la entidad usuario contenga por lo menos una fila
-DELIMITER //
-
-CREATE FUNCTION counterUSerAdmin()
-RETURNS INT
-BEGIN
-
-DECLARE x INT;
-SET x = (SELECT  id_tipo_usuario
-FROM Usuario 
-WHERE id_tipo_usuario=1);
-RETURN x;
-
-END
-//
-DELIMITER ;
