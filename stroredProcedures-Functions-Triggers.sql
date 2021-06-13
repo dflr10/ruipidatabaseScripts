@@ -100,7 +100,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que realiza una comprovación de que exista al menos un usuario Administrador en la base de datos
+#Procedimiento que realiza una comprobación de que exista al menos un usuario Administrador en la base de datos
 DELIMITER //
 
 CREATE PROCEDURE adminUsers()
@@ -145,7 +145,7 @@ END
 DELIMITER ;
 
 
-#Cuenta en número de usuarios registrados a partir de un username enviado como parámetro max=1 y min=0
+#Cuenta el número de usuarios registrados a partir de un username enviado como parámetro max=1 y min=0
 DELIMITER //
 
 CREATE PROCEDURE alreadyRegisteredUser(in_username VARCHAR(45))
@@ -159,7 +159,7 @@ END
 //
 DELIMITER ;
 
-#consulta el password según el nombre de usuario pasado cmo parámetro
+#consulta el password según el nombre de usuario pasado como parámetro
 DELIMITER //
 
 CREATE PROCEDURE getPasswordEncrypted(in_username VARCHAR(45))
@@ -258,7 +258,7 @@ END
 //
 DELIMITER ;
 
-#Procedimiento que selecciona las coinsidencias de la busqueda de un Paciente por su nombre o parte de él
+#Procedimiento que selecciona las coincidencias de la busqueda de un Paciente por su nombre o parte de él
 DELIMITER //
 
 CREATE PROCEDURE selectPatient(in_name VARCHAR(45))
