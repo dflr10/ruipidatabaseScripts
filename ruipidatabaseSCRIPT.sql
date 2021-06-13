@@ -1,4 +1,4 @@
--- MySQL Workbench Forward Engineering
+-- ruipidatabase script
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Paciente` (
   `comunidad` VARCHAR(45) NULL,
   `municipio` VARCHAR(45) NULL,
   `id_persona` INT NOT NULL,
-  `id_programaPyDT` INT NULL,
+  `id_programaPyDT` INT NOT NULL,
   PRIMARY KEY (`id_paciente`),
   INDEX `fk_Paciente_Persona1_idx` (`id_persona` ASC) VISIBLE,
   INDEX `fk_Paciente_Programa_PyDT1_idx` (`id_programaPyDT` ASC) VISIBLE,
@@ -162,14 +162,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ruipidatabase`.`timestamps`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ruipidatabase`.`timestamps` (
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_time` TIMESTAMP NULL);
-
-
--- -----------------------------------------------------
 -- Table `ruipidatabase`.`HistoriaC`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ruipidatabase`.`HistoriaC` (
@@ -197,19 +189,134 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ruipidatabase`.`Auditoria_usuario`
+-- Table `ruipidatabase`.`Historial_usuario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Auditoria_usuario` (
+CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Historial_usuario` (
   `id_registro` INT NOT NULL AUTO_INCREMENT,
-  `lugar` VARCHAR(45) NULL,
+  `last_username` VARCHAR(45) NULL,
+  `last_password` VARCHAR(45) NULL,
+  `last_cargo` VARCHAR(45) NULL,
+  `last_area` VARCHAR(45) NULL,
+  `last_id_tipo_usuario` INT NULL,
+  `new_username` VARCHAR(45) NULL,
+  `new_password` VARCHAR(45) NULL,
+  `new_cargo` VARCHAR(45) NULL,
+  `new_area` VARCHAR(45) NULL,
+  `new_id_tipo_usuario` INT NULL,
   `fecha` DATETIME NULL,
-  `accion` VARCHAR(100) NULL,
-  `id_usuario_insertado` INT NOT NULL,
+  `accion` VARCHAR(45) NULL,
+  `lugar` VARCHAR(45) NULL,
+  `id_usuario_actualizado` INT NOT NULL,
   PRIMARY KEY (`id_registro`),
-  INDEX `fk_Auditoria_usuario_Usuario1_idx` (`id_usuario_insertado` ASC) VISIBLE,
-  CONSTRAINT `fk_Auditoria_usuario_Usuario1`
-    FOREIGN KEY (`id_usuario_insertado`)
+  INDEX `fk_Historial_usuario_Usuario1_idx` (`id_usuario_actualizado` ASC) VISIBLE,
+  CONSTRAINT `fk_Historial_usuario_Usuario1`
+    FOREIGN KEY (`id_usuario_actualizado`)
     REFERENCES `ruipidatabase`.`Usuario` (`id_usuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ruipidatabase`.`Historial_paciente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Historial_paciente` (
+  `id_registro` INT NOT NULL AUTO_INCREMENT,
+  `last_rh` VARCHAR(45) NULL,
+  `last_gestante` VARCHAR(45) NULL,
+  `last_sexo` VARCHAR(45) NULL,
+  `last_etnia` VARCHAR(45) NULL,
+  `last_comunidad` VARCHAR(45) NULL,
+  `last_municipio` VARCHAR(45) NULL,
+  `last_id_programaPyDT` INT NULL,
+  `new_rh` VARCHAR(45) NULL,
+  `new_gestante` VARCHAR(45) NULL,
+  `new_sexo` VARCHAR(45) NULL,
+  `new_etnia` VARCHAR(45) NULL,
+  `new_comunidad` VARCHAR(45) NULL,
+  `new_municipio` VARCHAR(45) NULL,
+  `new_id_programaPyDT` INT NULL,
+  `fecha` DATETIME NULL,
+  `accion` VARCHAR(45) NULL,
+  `lugar` VARCHAR(45) NULL,
+  `id_paciente_actualizado` INT NOT NULL,
+  PRIMARY KEY (`id_registro`),
+  INDEX `fk_Historial_paciente_Paciente1_idx` (`id_paciente_actualizado` ASC) VISIBLE,
+  CONSTRAINT `fk_Historial_paciente_Paciente1`
+    FOREIGN KEY (`id_paciente_actualizado`)
+    REFERENCES `ruipidatabase`.`Paciente` (`id_paciente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ruipidatabase`.`Historial_persona`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Historial_persona` (
+  `id_registro` INT NOT NULL AUTO_INCREMENT,
+  `last_nombre` VARCHAR(45) NULL,
+  `last_apellido` VARCHAR(45) NULL,
+  `last_tipo_documento` VARCHAR(45) NULL,
+  `last_numero_documento` VARCHAR(45) NULL,
+  `last_fecha_nacimiento` DATE NULL,
+  `last_ciudad_origen` VARCHAR(45) NULL,
+  `last_departamento_origen` VARCHAR(45) NULL,
+  `last_email` TEXT(45) NULL,
+  `last_celular` VARCHAR(15) NULL,
+  `last_direccion` TEXT(150) NULL,
+  `last_activo` TINYINT NULL,
+  `new_nombre` VARCHAR(45) NULL,
+  `new_apellido` VARCHAR(45) NULL,
+  `new_tipo_documento` VARCHAR(45) NULL,
+  `new_numero_documento` VARCHAR(45) NULL,
+  `new_fecha_nacimiento` DATE NULL,
+  `new_ciudad_origen` VARCHAR(45) NULL,
+  `new_departamento_origen` VARCHAR(45) NULL,
+  `new_email` TEXT NULL,
+  `new_celular` VARCHAR(15) NULL,
+  `new_direccion` TEXT(150) NULL,
+  `new_activo` TINYINT NULL,
+  `fecha` DATETIME NULL,
+  `accion` VARCHAR(45) NULL,
+  `lugar` VARCHAR(45) NULL,
+  `id_persona_actualizada` INT NOT NULL,
+  PRIMARY KEY (`id_registro`),
+  INDEX `fk_Historial_persona_Persona1_idx` (`id_persona_actualizada` ASC) VISIBLE,
+  CONSTRAINT `fk_Historial_persona_Persona1`
+    FOREIGN KEY (`id_persona_actualizada`)
+    REFERENCES `ruipidatabase`.`Persona` (`id_persona`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ruipidatabase`.`Historial_empresa`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ruipidatabase`.`Historial_empresa` (
+  `id_registro` INT NOT NULL AUTO_INCREMENT,
+  `last_direccion_empresa` TEXT(150) NULL,
+  `last_ciudad_empresa` VARCHAR(45) NULL,
+  `last_departamento_empresa` VARCHAR(45) NULL,
+  `last_telefono_empresa` VARCHAR(45) NULL,
+  `last_url` TEXT(100) NULL,
+  `last_email_empresa` TEXT(45) NULL,
+  `new_direccion_empresa` TEXT(150) NULL,
+  `new_ciudad_empresa` VARCHAR(45) NULL,
+  `new_departamento_empresa` VARCHAR(45) NULL,
+  `new_telefono_empresa` VARCHAR(45) NULL,
+  `new_url` TEXT(100) NULL,
+  `new_email_empresa` TEXT(45) NULL,
+  `fecha` VARCHAR(45) NULL,
+  `accion` VARCHAR(45) NULL,
+  `lugar` VARCHAR(45) NULL,
+  `id_empresa_actualizada` INT NOT NULL,
+  PRIMARY KEY (`id_registro`),
+  INDEX `fk_Empresa_copy1_Empresa1_idx` (`id_empresa_actualizada` ASC) VISIBLE,
+  CONSTRAINT `fk_Empresa_copy1_Empresa1`
+    FOREIGN KEY (`id_empresa_actualizada`)
+    REFERENCES `ruipidatabase`.`Empresa` (`id_empresa`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -218,7 +325,6 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 
 
 #Ingresar datos de tipos de usuario precargados
