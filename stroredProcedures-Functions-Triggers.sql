@@ -1,5 +1,7 @@
-###USUARIOS###
-#Procedimiento que valida el Usuaro que inicia sesión en RUIPI
+#################################################################################################################################################
+#									USUARIOS								#
+#################################################################################################################################################
+#Procedimiento que permite validar el Usuaro que inicia sesión en RUIPI
 DELIMITER //
 
 
@@ -17,7 +19,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que inserta en las tablas Persona y Usuario los datos correspondientes a un nuevo Usuario
+#Procedimiento que permite insertar en las tablas Persona y Usuario los datos correspondientes a un nuevo Usuario
 DELIMITER //
 
 CREATE PROCEDURE insertUser(in_name VARCHAR(45), in_apellido VARCHAR(45), in_tipo_documento VARCHAR(45),
@@ -56,7 +58,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que selecciona los datos de un usuario
+#Procedimiento que permite seleccionar los datos de un Usuario
 DELIMITER //
 
 CREATE PROCEDURE selectUser(in_id_usuario INT)
@@ -74,7 +76,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que actualiza algún registro de un Usuario existente
+#Procedimiento que permite actualizar algún registro de un Usuario existente
 DELIMITER //
 
 CREATE PROCEDURE updateUser(in_name VARCHAR(45), in_apellido VARCHAR(45), in_tipo_documento VARCHAR(45),
@@ -100,7 +102,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que realiza una comprobación de que exista al menos un usuario Administrador en la base de datos
+#Procedimiento que permite realizar una comprobación de que exista al menos un Usuario Administrador en la base de datos
 DELIMITER //
 
 CREATE PROCEDURE adminUsers()
@@ -114,7 +116,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que realiza un soft delete de un Usuario
+#Procedimiento que permite realiza un soft-delete de un Usuario alterando su atributo activo de true a false o 1 a 0
 DELIMITER //
 
 CREATE PROCEDURE deleteUser(in_id_usuario INT)
@@ -128,7 +130,7 @@ END
 DELIMITER ;
 
 
-#Consulta todos los datos de los Usuarios activos
+#Procedimiento que permite seleccionar todos los datos de los Usuarios activos
 DELIMITER //
 
 CREATE PROCEDURE showAllUsers( )
@@ -145,7 +147,8 @@ END
 DELIMITER ;
 
 
-#Cuenta el número de usuarios registrados a partir de un username enviado como parámetro max=1 y min=0
+#Procedimiento que permite contar el número de Usuarios registrados a partir de un username enviado como parámetro con el fin 
+#de evitar que hayan dos registrados con el mismo username o que un Usuario quiera registrarse con un username de un Usuario inactivo
 DELIMITER //
 
 CREATE PROCEDURE alreadyRegisteredUser(in_username VARCHAR(45))
@@ -159,7 +162,8 @@ END
 //
 DELIMITER ;
 
-#consulta el password según el nombre de usuario pasado como parámetro
+
+#Procedimiento que permite consultar el password encriptado según el nombre de usuario pasado como parámetro
 DELIMITER //
 
 CREATE PROCEDURE getPasswordEncrypted(in_username VARCHAR(45))
@@ -174,8 +178,7 @@ END
 DELIMITER ;
 
 
-
-#Procedimiento que inserta en las tablas Persona y Usuario los datos correspondientes a un primer Usuario Administrador
+#Procedimiento que permite insertar en las tablas Persona y Usuario los datos correspondientes a un primer Usuario Administrador
 DELIMITER //
 
 CREATE PROCEDURE insertFirstUser(in_name VARCHAR(45), in_apellido VARCHAR(45), in_tipo_documento VARCHAR(45),
@@ -210,7 +213,8 @@ END
 //
 DELIMITER ;
 
-#Procedimiento que actualiza la contraseña del usuario cuyo username e email
+
+#Procedimiento que permite actualizar la contraseña del usuario cuyo cédula e email
 #corresponden a los pasados como parámetro
 DELIMITER //
 
@@ -224,7 +228,8 @@ END
 //
 DELIMITER ;
 
-#Procedimiento que verifica que el username e email
+
+#Procedimiento que permite verificar que la cédula e email
 #pasados como parámetro pertenezcan a un usuario registrado en la base de datos
 DELIMITER //
 
@@ -238,9 +243,10 @@ END
 //
 DELIMITER ;
 
-
-###PACIENTES###
-#Procedimiento que encuentra un Paciente por su ID
+#################################################################################################################################################
+#									PACIENTES								#
+#################################################################################################################################################
+#Procedimiento que permite seleccionar un Paciente a partir de un ID pasado como parámetro
 DELIMITER //
 
 CREATE PROCEDURE findPatient(in_id int)
@@ -258,7 +264,7 @@ END
 //
 DELIMITER ;
 
-#Procedimiento que selecciona las coincidencias de la busqueda de un Paciente por su nombre o parte de él
+#Procedimiento que permite seleccionar las coincidencias de la busqueda de un Paciente por su nombre o parte de él
 DELIMITER //
 
 CREATE PROCEDURE selectPatient(in_name VARCHAR(45))
@@ -276,7 +282,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que inserta en las tablas Persona y Paciente los datos correspondientes a un nuevo Paceinte
+#Procedimiento que permite insertar en las tablas Persona y Paciente los datos correspondientes a un nuevo Paceinte
 DELIMITER //
 
 CREATE PROCEDURE insertPatient(in_name VARCHAR(45), in_apellido VARCHAR(45), in_tipo_documento VARCHAR(45),
@@ -315,7 +321,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que actualiza algún registro de un Paciente existente
+#Procedimiento que permite actualizar algún registro de un Paciente existente
 DELIMITER //
 
 CREATE PROCEDURE updatePatient(in_name VARCHAR(45), in_apellido VARCHAR(45), in_tipo_documento VARCHAR(45),
@@ -341,7 +347,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que realiza un soft delete de un Paciente
+#Procedimiento que permite realizar un soft-delete de un Paciente  alterando su atributo activo de true a false o 1 a 0
 DELIMITER //
 
 CREATE PROCEDURE deletePatient(in_id_paciente INT)
@@ -354,12 +360,17 @@ END
 //
 DELIMITER ;
 
-#Se encarga de generar un registro de una fila en la tabla  Paciente_Usuario cuando un usuario realice
-#la inserción de un paciente
 
+#################################################################################################################################################
+#								HISTORIA CLÍNICA								#
+#################################################################################################################################################
 
-##EMPRESA##
-##Realiza una inserción de los datos de la empresa a la base de datos
+#POR DEFINIR
+
+#################################################################################################################################################
+#									EMPRESA									#
+#################################################################################################################################################
+#Permite realizar la inserción de los datos de la Empresa en la base de datos
 DELIMITER //
 
 CREATE PROCEDURE insertEnterpriseInfo(in_id_empresa INT, in_nit INT, in_nombre_empresa VARCHAR(45), 
@@ -376,7 +387,8 @@ END
 //
 DELIMITER ;
 
-##Realiza una actualización de los datos de la empresa a la base de datos
+
+#Permite realiza una actualización de los datos de la Empresa en la base de datos
 DELIMITER //
 
 CREATE PROCEDURE updateEnterpriseInfo(in_direccion TEXT(150),  in_ciudad VARCHAR(45), 
@@ -393,7 +405,7 @@ END
 DELIMITER ;
 
 
-#Procedimiento que selecciona los datos de la empresa
+#Procedimiento que permite seleccionar los datos de la Empresa
 DELIMITER //
 
 CREATE PROCEDURE selectEnterpriseInfo(in_id_empresa INT)
@@ -406,8 +418,10 @@ END
 //
 DELIMITER ;
 
-##TRIGGERS##
-#Se encarga de guardar registros de actualización de una persona 
+#################################################################################################################################################
+#									TRIGGERS								#
+#################################################################################################################################################
+#Se encarga de guardar registros de actualización de una Persona
 DELIMITER //
 
 CREATE TRIGGER update_person_logs_BU
@@ -432,7 +446,7 @@ END//
 DELIMITER ;
 
 
-#Se encarga de guardar registros de actualización de un usuario 
+#Se encarga de guardar registros de actualización de un Usuario 
 DELIMITER //
 
 CREATE TRIGGER update_user_logs_BU
@@ -452,7 +466,7 @@ END//
 DELIMITER ;
 
 
-#Se encarga de guardar registros de actualización de un paciente 
+#Se encarga de guardar registros de actualización de un Paciente 
 DELIMITER //
 
 CREATE TRIGGER update_patient_logs_BU
@@ -473,7 +487,7 @@ END//
 DELIMITER ;
 
 
-#Se encarga de guardar registros de actualización de la empresa 
+#Se encarga de guardar registros de actualización de la Empresa 
 DELIMITER //
 
 CREATE TRIGGER update_enterprise_logs_BU
@@ -496,8 +510,35 @@ END//
 DELIMITER ;
 
 
-##FUNCIONES##
-#Verificar que la entidad Empresa contenga datos
+#Se encarga de guardar registros de actualización de la Historia Clínica de un paciente 
+DELIMITER //
+
+CREATE TRIGGER update_cHistory_logs_BU
+BEFORE UPDATE ON HistoriaC 
+FOR EACH ROW
+
+BEGIN
+INSERT INTO Historial_historiaC (last_motivo_consulta, last_eps, last_alergias_medicamentos, last_habitos,
+last_enfermedad_actual, last_antecedentes_EP, last_antecedentes_EF, last_info_parto, last_diagnostico, 
+last_medicamentos_formulados, 
+new_motivo_consulta, new_eps, new_alergias_medicamentos, new_habitos, new_enfermedad_actual, new_antecedentes_EP, 
+new_antecedentes_EF, new_info_parto, new_diagnostico, new_medicamentos_formulados, 
+fecha, accion, lugar, id_historiaC_actualizada) 
+VALUES (OLD.motivo_consulta, OLD.eps, OLD.alergias_medicamentos, OLD.habitos, OLD.enfermedad_actual, 
+OLD.antecedentes_EP, OLD.antecedentes_EF, OLD.info_parto, OLD.diagnostico, OLD.medicamentos_formulados, 
+NEW.motivo_consulta, NEW.eps, NEW.alergias_medicamentos, NEW.habitos, NEW.enfermedad_actual, 
+NEW.antecedentes_EP, NEW.antecedentes_EF, NEW.info_parto, NEW.diagnostico, NEW.medicamentos_formulados, 
+ now(), "Se modificó la historia clínica.", current_user(), OLD.id_historiaC);
+
+END//
+
+DELIMITER ;
+
+
+#################################################################################################################################################
+#									FUNCIONES								#
+#################################################################################################################################################
+#Función que permite verificar que la entidad Empresa contenga datos
 DELIMITER //
 
 CREATE FUNCTION counterEnterpriseInfo()
@@ -514,7 +555,7 @@ END
 //
 DELIMITER ;
 
-#Verifica que la entidad usuario contenga al menos una fila
+#Función que permite verificar que la entidad Usuario contenga por lo menos una fila
 DELIMITER //
 
 CREATE FUNCTION counterUSerAdmin()
@@ -530,7 +571,9 @@ RETURN x;
 END
 //
 DELIMITER ;
-#Verifica que la entidad usuario contenga al menos una fila
+
+
+#Función que permite verificar que la entidad usuario contenga por lo menos una fila
 DELIMITER //
 
 CREATE FUNCTION counterUSerAdmin()
