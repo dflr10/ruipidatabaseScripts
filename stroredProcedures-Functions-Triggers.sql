@@ -1,5 +1,5 @@
 #############################################################################
-# STORED PROCEDURES USUARIOS						#
+#									USUARIOS								#
 #############################################################################
 #Procedimiento que permite validar el Usuaro que inicia sesión en RUIPI
 DELIMITER //
@@ -214,37 +214,39 @@ END
 DELIMITER ;
 
 
-#Procedimiento que permite actualizar la contraseña del usuario cuyo cédula e email
+#Procedimiento que permite actualizar la contraseña del usuario cuyo username e email
 #corresponden a los pasados como parámetro
 DELIMITER //
 
-CREATE PROCEDURE resetPassword(in_numero_documento VARCHAR(45), in_email VARCHAR(45), in_password VARCHAR(45))
+CREATE PROCEDURE resetPassword(in_username VARCHAR(45), in_email VARCHAR(45), in_password VARCHAR(45))
 BEGIN
 
 UPDATE usuario AS u, persona AS pe SET u.password=in_password 
-WHERE pe.numero_documento=in_numero_documento AND pe.email=in_email;
+WHERE pe.id_persona=u.id_persona AND u.username=in_username AND pe.email=in_email AND pe.activo=1;
 
 END
 //
 DELIMITER ;
 
 
-#Procedimiento que permite verificar que la cédula e email
+#Procedimiento que permite verificar que el username e email
 #pasados como parámetro pertenezcan a un usuario registrado en la base de datos
 DELIMITER //
 
-CREATE PROCEDURE beforeResetPassword(in_numero_documento VARCHAR(45), in_email VARCHAR(45))
+CREATE PROCEDURE beforeResetPassword(in_username VARCHAR(45), in_email VARCHAR(45))
 BEGIN
 
-SELECT pe.numero_documento, pe.email FROM usuario AS u INNER JOIN persona AS pe 
-ON  pe.id_persona=u.id_persona WHERE pe.numero_documento=in_numero_documento AND pe.email=in_email;
+SELECT u.username, pe.email FROM usuario AS u INNER JOIN persona AS pe 
+ON  pe.id_persona=u.id_persona WHERE u.username=in_username AND pe.email=in_email AND pe.activo=1;
 
 END
 //
 DELIMITER ;
 
+
+
 #############################################################################
-# STORED PROCEDURES PACIENTES						#
+#									PACIENTES								#
 #############################################################################
 #Procedimiento que permite seleccionar un Paciente a partir de un ID pasado como parámetro
 DELIMITER //
@@ -387,7 +389,7 @@ DELIMITER ;
 
 
 #################################################################################
-# STORED PROCEDURES HISTORIA CLÍNICA						#
+#								HISTORIA CLÍNICA								#
 #################################################################################
 #Selecciona los datos de la historia clínica del paciente, si no tiene datos de historia clínica
 #selecciona el id del paciente para que se pueda registrar una.alter
@@ -402,7 +404,7 @@ SELECT pe.id_persona, pe.nombre, pe.apellido, pe.tipo_documento, pe.numero_docum
  hc.antecedentes_EF, hc.medicamentos_formulados, hc.info_parto, hc.diagnostico, hc.id_paciente
  FROM Persona AS pe INNER JOIN Paciente AS pa INNER JOIN HistoriaC AS hc 
  ON pe.id_persona=pa.id_persona  AND pa.id_paciente=hc.id_paciente
- WHERE hc.id_paciente=1 AND pe.activo=1;
+ WHERE hc.id_paciente=in_id_paciente AND pe.activo=1;
 
 END
 //
@@ -429,7 +431,7 @@ END
 DELIMITER ;
 
 #############################################################################
-# STORED PROCEDURES EMPRESA						#
+#									EMPRESA									#
 #############################################################################
 #Permite realizar la inserción de los datos de la Empresa en la base de datos
 DELIMITER //
@@ -508,7 +510,7 @@ DELIMITER ;
 
 
 #############################################################################
-# TRIGGERS								#
+#									TRIGGERS								#
 #############################################################################
 #Se encarga de guardar registros de actualización de una Persona
 DELIMITER //
@@ -625,7 +627,7 @@ DELIMITER ;
 
 
 #############################################################################
-# FUNCTIONS								#
+#									FUNCIONES								#
 #############################################################################
 #Función que permite verificar que la entidad Empresa contenga datos
 DELIMITER //
@@ -715,6 +717,23 @@ END
 DELIMITER ;
 
 
+#Función que permite contar el núermo de Usuarios activos registrados en la base de datos.
+DELIMITER //
+
+CREATE FUNCTION counterAllUsers()
+RETURNS INT
+BEGIN
+
+DECLARE x INT;
+SET x = (SELECT COUNT(id_usuario) FROM persona AS pe INNER JOIN usuario AS u 
+ON pe.id_persona=u.id_persona WHERE pe.activo=1);
+RETURN x;
+
+END
+//
+DELIMITER ;
+
+
 #Función que permite contar el núermo de Pacientes activos registrados en la base de datos.
 DELIMITER //
 
@@ -725,6 +744,108 @@ BEGIN
 DECLARE x INT;
 SET x = (SELECT COUNT(id_paciente) FROM persona AS pe INNER JOIN paciente AS pa 
 ON pe.id_persona=pa.id_persona WHERE pe.activo=1);
+RETURN x;
+
+END
+//
+DELIMITER ;
+
+
+#Función que permite contar el núermo de Pacientes activos de la étnia Arhuaco registrados en la base de datos.
+DELIMITER //
+
+CREATE FUNCTION counterAllArhuaco()
+RETURNS INT
+BEGIN
+
+DECLARE x INT;
+SET x = (SELECT COUNT(id_paciente) FROM persona AS pe INNER JOIN paciente AS pa 
+ON pe.id_persona=pa.id_persona WHERE pa.etnia="Arhuaco" AND pe.activo=1);
+RETURN x;
+
+END
+//
+DELIMITER ;
+
+
+#Función que permite contar el núermo de Pacientes activos de la étnia Wiwa registrados en la base de datos.
+DELIMITER //
+
+CREATE FUNCTION counterAllWiwa()
+RETURNS INT
+BEGIN
+
+DECLARE x INT;
+SET x = (SELECT COUNT(id_paciente) FROM persona AS pe INNER JOIN paciente AS pa 
+ON pe.id_persona=pa.id_persona WHERE pa.etnia="Wiwa" AND pe.activo=1);
+RETURN x;
+
+END
+//
+DELIMITER ;
+
+
+#Función que permite contar el núermo de Pacientes activos de la étnia Kogui registrados en la base de datos.
+DELIMITER //
+
+CREATE FUNCTION counterAllKogui()
+RETURNS INT
+BEGIN
+
+DECLARE x INT;
+SET x = (SELECT COUNT(id_paciente) FROM persona AS pe INNER JOIN paciente AS pa 
+ON pe.id_persona=pa.id_persona WHERE pa.etnia="Kogui" AND pe.activo=1);
+RETURN x;
+
+END
+//
+DELIMITER ;
+
+
+#Función que permite contar el núermo de Pacientes activos de otras étnias registrados en la base de datos.
+DELIMITER //
+
+CREATE FUNCTION counterAllOthers()
+RETURNS INT
+BEGIN
+
+DECLARE x INT;
+SET x = (SELECT COUNT(id_paciente) FROM persona AS pe INNER JOIN paciente AS pa 
+ON pe.id_persona=pa.id_persona WHERE pa.etnia="Otro" AND pe.activo=1);
+RETURN x;
+
+END
+//
+DELIMITER ;
+
+
+#Función que permite obtener el ID del municipio seleccionado
+DELIMITER //
+
+CREATE FUNCTION getIDMunicipio(in_municipio VARCHAR(45))
+RETURNS INT
+BEGIN
+
+DECLARE x INT;
+SET x = (SELECT mu.id_municipio FROM Municipio AS mu
+WHERE mu.municipio=in_municipio);
+RETURN x;
+
+END
+//
+DELIMITER ;
+
+
+#Función que permite obtener el nombre del municipio seleccionado
+DELIMITER //
+
+CREATE FUNCTION getNameMunicipio(in_id_municipio INT)
+RETURNS VARCHAR(45)
+BEGIN
+
+DECLARE x VARCHAR(45);
+SET x = (SELECT mu.municipio FROM Municipio AS mu
+WHERE mu.id_municipio=in_id_municipio);
 RETURN x;
 
 END
